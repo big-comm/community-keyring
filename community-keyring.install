@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# Color definitions - elegant blue theme
+blueDark="\e[1;38;5;33m"     # Bold dark blue
+mediumBlue="\e[1;38;5;32m"   # Bold medium blue
+lightBlue="\e[1;38;5;39m"    # Bold light blue
+cyan="\e[1;38;5;45m"         # Bold cyan
+white="\e[1;97m"             # Bold white
+whiteRegular="\e[1;97m"      # Bold white (for regular text)
+reset="\e[0m"                # Reset text formatting
+
+msg() {
+    local message=$1
+    shift 1
+    printf "${blueDark}[${lightBlue}community-keyring${blueDark}]${reset} ${cyan}→${reset} ${whiteRegular}${message}${reset}\n" "$@" >&2
+}
+
+post_install() {
+  init_keys() {
+    msg "Initializing pacman keyring..."
+    pacman-key --init >/dev/null 2>&1
+  }
+
+  attach_keys() {
+    msg "Attaching community keys..."
+    pacman-key --populate community >/dev/null 2>&1
+  }
+
+  attach_all_keys() {
+    msg "Attaching keys..."
+    pacman-key --populate >/dev/null 2>&1
+  }
+
+  # if the file does not exist and/or is empty.
+  if ! test -e /etc/pacman.d/gnupg/pubring.gpg; then
+    init_keys
+    attach_all_keys
+    msg "Done!"
+    return
+  # if the file does not exist and/or is empty.
+  elif ! test -e /etc/pacman.d/gnupg/trustdb.gpg; then
+    init_keys
+    attach_all_keys
+    msg "Done!"
+    return
+  fi
+
+  init_keys
+  attach_keys
+  msg "Done!"
+}
+
+post_upgrade() {
+  post_install
+}
