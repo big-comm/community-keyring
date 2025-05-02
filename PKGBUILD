@@ -3,7 +3,7 @@
 pkgname=community-keyring
 pkgdesc="Community PGP keyring"
 depends=('pacman')
-pkgver=$(date +%Y%m%d)
+pkgver=$(date +%y.%m.%d)
 pkgrel=$(date +%H%M)
 arch=('any')
 license=('MIT')
