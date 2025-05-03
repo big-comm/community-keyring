@@ -5,6 +5,7 @@ pkgdesc="Community PGP keyring"
 depends=('pacman')
 pkgver=$(date +%y.%m.%d)
 pkgrel=$(date +%H%M)
+epoch=1
 arch=('any')
 license=('MIT')
 url="https://github.com/big-comm/${pkgname}"
